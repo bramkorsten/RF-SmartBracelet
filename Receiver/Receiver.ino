@@ -14,8 +14,10 @@ int red = 7;
 int green = 8;
 int blue = 9;
 // set default blinkspeed and color
-int blinkinterval = 200;
-String blinkcolor = "";
+int presetColor = 1;
+// time functions
+unsigned long previousMillis = 0;
+int interval = 200;
 
 void setup() // code to run once
 {
@@ -36,7 +38,6 @@ void loop() // code to run at all times
 {
   if (vw_get_message(message, &messageLength)) // Non-blocking, if the reciever gets a message, run the code
   {
-
     Serial.print("Message Recieved: "); // this code prints out the message recieved for debugging
     for (int i = 0; i < messageLength; i++)
     {
@@ -44,52 +45,75 @@ void loop() // code to run at all times
     }
     Serial.println();
 
-    /*
-     * The message that should be recieved is always five digits long
-     * the first 2 digits are used for achieving diferent results
-     *  "00" - Set Color
-     *  "10" - Set Animation Speed
-     *  "20" - Set Animation Type
-     */
     if ((String((char *)message).substring(0, 2)) == "00") { // check the contents of the recieved message for type
-
-      if ((String((char *)message)) == "00red") { // if message reads [color], set this color
-        digitalWrite(red, HIGH);
-        digitalWrite(green, LOW);
-        digitalWrite(blue, LOW);
+      if ((String((char *)message)) == "00red") // if message reads [color], set this color
+      {
+        setBlinkColor((String((char *)message)).substring(2, 5));
       }
-      if ((String((char *)message)) == "00gre") {
-        digitalWrite(red, LOW);
-        digitalWrite(green, HIGH);
-        digitalWrite(blue, LOW);
-      }
-      if ((String((char *)message)) == "00blu") {
-        digitalWrite(red, LOW);
-        digitalWrite(green, LOW);
-        digitalWrite(blue, HIGH);
-      }
-
     }
-    else if ((String((char *)message).substring(0, 2)) == "10") { // if the content is "10", set the speed
-      /*
-       * unfinished code
-       * blinkinterval = (String((char *)message).substring(2,5)).toInt();
-       * Serial.println(blinkinterval);
-       */
+    else if ((String((char *)message).substring(0, 2)) == "10") // if the content is "10", set the speed
+    {
+      int bpm = (String((char *)message).substring(2, 5)).toInt();
+      interval = bpm / 60000;
+      Serial.println(bpm);
     }
-    else if ((String((char *)message).substring(0, 2)) == "20") { // if the content is "20", set the animationtype
-      
+    else if ((String((char *)message).substring(0, 2)) == "20") // if the content is "20", set the animationtype
+    {
     }
     else {
-      Serial.println("error in message: Wrong format!");
+      Serial.println("errorcode 0: Wrong format parsing!");
     }
 
-    
+
+  }
+
+  updateLed();
+}
+
+void setBlinkColor(String color)
+{
+  if (color == "red")
+  {
+    presetColor = 1;
+  }
+  else if (color == "blu")
+  {
+    presetColor = 2;
+  }
+  else if (color == "gre")
+  {
+    presetColor = 3;
+  }
+  else if (color == "yel")
+  {
+    presetColor = 4;
+  }
+  else if (color == "pin")
+  {
+    presetColor = 5;
+  }
+  else if (color == "pur")
+  {
+    presetColor = 6;
+  }
+  else {
+    Serial.println("errorcode 1: Undefined Color!");
+  }
+}
+
+void updateLed()
+{
+  unsigned long currentMillis = millis();
+
+  if (currentMillis - previousMillis >= interval)
+  {
+    // save the last time you blinked the LED
+    previousMillis = currentMillis;
   }
 }
 
 void softReset() // Restarts program from beginning but does not reset the peripherals and registers
 {
-  asm volatile ("  jmp 0");  
-}  
+  asm volatile ("  jmp 0");
+}
 
