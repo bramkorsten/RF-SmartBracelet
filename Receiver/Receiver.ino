@@ -3,7 +3,7 @@
 /*
  * Reciever module (slave)
  * Kekke FestiBracelet
- * This program recieves incoming commands using the VirtualWire Library. 
+ * This program recieves incoming commands using the VirtualWire Library.
  * The code handles the request onboard, and sends the correct information to the leds.
  */
 
@@ -51,8 +51,8 @@ void loop() // code to run at all times
      *  "10" - Set Animation Speed
      *  "20" - Set Animation Type
      */
-    if ((String((char *)message).substring(0,2)) == "00") { // check the contents of the recieved message for type
-      
+    if ((String((char *)message).substring(0, 2)) == "00") { // check the contents of the recieved message for type
+
       if ((String((char *)message)) == "00red") { // if message reads [color], set this color
         digitalWrite(red, HIGH);
         digitalWrite(green, LOW);
@@ -68,15 +68,28 @@ void loop() // code to run at all times
         digitalWrite(green, LOW);
         digitalWrite(blue, HIGH);
       }
-      
+
     }
-    if ((String((char *)message).substring(0,2)) == "10") { // if the content is "10", set the speed
+    else if ((String((char *)message).substring(0, 2)) == "10") { // if the content is "10", set the speed
       /*
        * unfinished code
        * blinkinterval = (String((char *)message).substring(2,5)).toInt();
        * Serial.println(blinkinterval);
-       */      
+       */
     }
+    else if ((String((char *)message).substring(0, 2)) == "20") { // if the content is "20", set the animationtype
+      
+    }
+    else {
+      Serial.println("error in message: Wrong format!");
+    }
+
+    
   }
 }
+
+void softReset() // Restarts program from beginning but does not reset the peripherals and registers
+{
+  asm volatile ("  jmp 0");  
+}  
 
