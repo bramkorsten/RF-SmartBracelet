@@ -15,6 +15,8 @@ int green = 8;
 int blue = 9;
 // set default blinkspeed and color
 int presetColor = 1;
+int animType = 1;
+String ledState = "off";
 // time functions
 unsigned long previousMillis = 0;
 int interval = 200;
@@ -54,11 +56,12 @@ void loop() // code to run at all times
     else if ((String((char *)message).substring(0, 2)) == "10") // if the content is "10", set the speed
     {
       int bpm = (String((char *)message).substring(2, 5)).toInt();
-      interval = bpm / 60000;
+      interval = 1000 / (bpm / 60);
       Serial.println(bpm);
     }
     else if ((String((char *)message).substring(0, 2)) == "20") // if the content is "20", set the animationtype
     {
+      animType = ((String((char *)message).substring(2, 5)).toInt());
     }
     else {
       Serial.println("errorcode 0: Wrong format parsing!");
@@ -67,7 +70,7 @@ void loop() // code to run at all times
 
   }
 
-  updateLed();
+  updateTime();
 }
 
 void setBlinkColor(String color)
@@ -101,7 +104,7 @@ void setBlinkColor(String color)
   }
 }
 
-void updateLed()
+void updateTime()
 {
   unsigned long currentMillis = millis();
 
@@ -109,6 +112,21 @@ void updateLed()
   {
     // save the last time you blinked the LED
     previousMillis = currentMillis;
+    updateLed();
+  }
+}
+
+void updateLed()
+{
+  // Turning ON the LEDS
+  if (ledState == "on")
+  {
+    ledState == "off";
+  }
+  // Turning OFF the LEDS based on animtype
+  else
+  {
+    ledState == "on";
   }
 }
 
