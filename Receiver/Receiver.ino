@@ -10,23 +10,30 @@
 byte message[VW_MAX_MESSAGE_LEN]; // a buffer to store the incoming messages
 byte messageLength = VW_MAX_MESSAGE_LEN; // the size of the message
 // set led IO ports
-int red = 7;
-int green = 8;
-int blue = 9;
+int redLed = 7;
+int greenLed = 8;
+int blueLed = 9;
 // set default blinkspeed and color
-int presetColor = 1;
-int animType = 1;
+String presetColor = "pin";
+int animType = 100;
 String ledState = "off";
 // time functions
 unsigned long previousMillis = 0;
 int interval = 200;
+// presetcolors
+int red[3]= {255,0,0};
+int gre[3]= {0,255,0};
+int blu[3]= {0,0,255};
+int yel[3]= {255,255,0};
+int pin[3]= {255,0,255};
+int pur[3]= {128,0,128};
 
 void setup() // code to run once
 {
   // set the led IO ports as outputs
-  pinMode(red, OUTPUT);
-  pinMode(green, OUTPUT);
-  pinMode(blue, OUTPUT);
+  pinMode(redLed, OUTPUT);
+  pinMode(greenLed, OUTPUT);
+  pinMode(blueLed, OUTPUT);
   pinMode(4, OUTPUT); // digital pin 4 is used to power the radio module
   digitalWrite(4, HIGH); // power digital pin 4
   // Initialize the IO and ISR
@@ -75,32 +82,12 @@ void loop() // code to run at all times
 
 void setBlinkColor(String color)
 {
-  if (color == "red")
+  if (color.length() == 3)
   {
-    presetColor = 1;
-  }
-  else if (color == "blu")
-  {
-    presetColor = 2;
-  }
-  else if (color == "gre")
-  {
-    presetColor = 3;
-  }
-  else if (color == "yel")
-  {
-    presetColor = 4;
-  }
-  else if (color == "pin")
-  {
-    presetColor = 5;
-  }
-  else if (color == "pur")
-  {
-    presetColor = 6;
+    presetColor = color;
   }
   else {
-    Serial.println("errorcode 1: Undefined Color!");
+    Serial.println("errorcode 1: Wrong color format!");
   }
 }
 
@@ -118,16 +105,26 @@ void updateTime()
 
 void updateLed()
 {
-  // Turning ON the LEDS
-  if (ledState == "on")
+  if (animType == 100)
   {
-    ledState == "off";
+    // Turning OFF the LEDs
+    if (ledState == "on")
+    {
+      analogWrite(redLed, 0);
+      analogWrite(greenLed, 0);
+      analogWrite(blueLed, 0);
+      ledState == "off";
+    }
+    // Turning ON the LEDs based on animtype
+    else
+    {
+      analogWrite(redLed, presetColor[0]);
+      analogWrite(greenLed, presetColor[1]);
+      analogWrite(blueLed, presetColor[2]);
+      ledState == "on";
+    }
   }
-  // Turning OFF the LEDS based on animtype
-  else
-  {
-    ledState == "on";
-  }
+
 }
 
 void softReset() // Restarts program from beginning but does not reset the peripherals and registers
