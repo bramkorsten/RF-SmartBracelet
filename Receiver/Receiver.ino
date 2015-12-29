@@ -2,7 +2,7 @@
 
 /*
  * Reciever module (slave)
- * Kekke FestiBracelet
+ * RF-SmartBracelet
  * This program recieves incoming commands using the VirtualWire Library.
  * The code handles the request onboard, and sends the correct information to the leds.
  */
@@ -13,6 +13,8 @@ byte messageLength = VW_MAX_MESSAGE_LEN; // the size of the message
 int redLed = 7;
 int greenLed = 8;
 int blueLed = 9;
+
+int resetPin = 12;
 // set default blinkspeed and color
 String presetColor = "pin";
 int animType = 100;
@@ -34,6 +36,8 @@ void setup() // code to run once
   pinMode(redLed, OUTPUT);
   pinMode(greenLed, OUTPUT);
   pinMode(blueLed, OUTPUT);
+  pinMode(resetPin, OUTPUT);
+  digitalWrite(resetPin, HIGH); // Set the Resetpin to high
   pinMode(4, OUTPUT); // digital pin 4 is used to power the radio module
   digitalWrite(4, HIGH); // power digital pin 4
   // Initialize the IO and ISR
@@ -76,7 +80,7 @@ void loop() // code to run at all times
 
 
   }
-
+  
   updateTime();
 }
 
@@ -130,5 +134,10 @@ void updateLed()
 void softReset() // Restarts program from beginning but does not reset the peripherals and registers
 {
   asm volatile ("  jmp 0");
+}
+
+void hardReset() // Restarts the complete arduino
+{
+  digitalWrite(resetPin, LOW);
 }
 
