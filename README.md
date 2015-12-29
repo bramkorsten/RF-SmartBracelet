@@ -1,4 +1,4 @@
-# Kekke-FestiBracelet
+# RF-SmartBracelet
 This Repository contains the code for both the Transmitter module as the Reciever module for a school project using multiple arduino's,
 433MHz RF radio module transmitter and recievers and RFID reader and scanner modules.
 
