@@ -19,16 +19,23 @@ int resetPin = 12;
 String presetColor = "pin";
 int animType = 100;
 String ledState = "off";
+int presetArray = 0;
 // time functions
 unsigned long previousMillis = 0;
 int interval = 200;
 // presetcolors
-int red[3]= {255,0,0};
-int gre[3]= {0,255,0};
-int blu[3]= {0,0,255};
-int yel[3]= {255,255,0};
-int pin[3]= {255,0,255};
-int pur[3]= {128,0,128};
+int off[3] = {0, 0, 0};
+int red[3] = {255, 0, 0};
+int gre[3] = {0, 255, 0};
+int blu[3] = {0, 0, 255};
+int yel[3] = {255, 255, 0};
+int pin[3] = {255, 0, 255};
+int pur[3] = {128, 0, 128};
+int ora[3] = {255, 165, 0};
+int whi[3] = {255, 255, 255};
+String pre1[3] = {"ora", "pin", "gre"};
+String pre2[3] = {"blu", "pin", "gre"};
+String pre3[3] = {"red", "ora", "yel"};
 
 void setup() // code to run once
 {
@@ -80,7 +87,7 @@ void loop() // code to run at all times
 
 
   }
-  
+
   updateTime();
 }
 
@@ -128,16 +135,45 @@ void updateLed()
       ledState == "on";
     }
   }
+  else if (animType == 200)
+  {
 
+  }
+  else if (animType == 301)
+  {
+    analogWrite(redLed, (pre1[presetArray])[0]);
+    analogWrite(greenLed, (pre1[presetArray])[1]);
+    analogWrite(blueLed, (pre1[presetArray])[2]);
+    presetArray++;
+  }
+  else if (animType == 302)
+  {
+    analogWrite(redLed, (pre2[presetArray])[0]);
+    analogWrite(greenLed, (pre2[presetArray])[1]);
+    analogWrite(blueLed, (pre2[presetArray])[2]);
+    presetArray++;
+  }
+  else if (animType == 303)
+  {
+    analogWrite(redLed, (pre3[presetArray])[0]);
+    analogWrite(greenLed, (pre3[presetArray])[1]);
+    analogWrite(blueLed, (pre3[presetArray])[2]);
+    presetArray++;
+    }
+
+    if (presetArray == 3)
+  {
+    presetArray = 0;
+  }
 }
 
 void softReset() // Restarts program from beginning but does not reset the peripherals and registers
-{
-  asm volatile ("  jmp 0");
-}
+  {
+    asm volatile ("  jmp 0");
+  }
 
-void hardReset() // Restarts the complete arduino
-{
-  digitalWrite(resetPin, LOW);
-}
+  void hardReset() // Restarts the complete arduino
+  {
+    digitalWrite(resetPin, LOW);
+  }
 
