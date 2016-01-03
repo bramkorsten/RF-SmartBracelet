@@ -10,15 +10,14 @@
 byte message[VW_MAX_MESSAGE_LEN]; // a buffer to store the incoming messages
 byte messageLength = VW_MAX_MESSAGE_LEN; // the size of the message
 // set led IO ports
-int redLed = 7;
-int greenLed = 8;
-int blueLed = 9;
+int redLed = 9;
+int greenLed = 10;
+int blueLed = 11;
 
 int resetPin = 12;
 // set default blinkspeed and color
-String presetColor = "pin";
 int animType = 100;
-String ledState = "off";
+byte ledState = 0;
 int presetArray = 0;
 // time functions
 unsigned long previousMillis = 0;
@@ -36,6 +35,7 @@ int whi[3] = {255, 255, 255};
 String pre1[3] = {"ora", "pin", "gre"};
 String pre2[3] = {"blu", "pin", "gre"};
 String pre3[3] = {"red", "ora", "yel"};
+int *presetColor = red;
 
 void setup() // code to run once
 {
@@ -95,7 +95,7 @@ void setBlinkColor(String color)
 {
   if (color.length() == 3)
   {
-    presetColor = color;
+    *presetColor = color.toInt();
   }
   else {
     Serial.println("errorcode 1: Wrong color format!");
@@ -119,20 +119,20 @@ void updateLed()
   if (animType == 100)
   {
     // Turning OFF the LEDs
-    if (ledState == "on")
+    if (ledState == 1)
     {
       analogWrite(redLed, 0);
       analogWrite(greenLed, 0);
       analogWrite(blueLed, 0);
-      ledState == "off";
+      ledState = 0;
     }
     // Turning ON the LEDs based on animtype
-    else
+    else if (ledState == 0)
     {
       analogWrite(redLed, presetColor[0]);
       analogWrite(greenLed, presetColor[1]);
       analogWrite(blueLed, presetColor[2]);
-      ledState == "on";
+      ledState = 1;
     }
   }
   else if (animType == 200)
@@ -159,21 +159,21 @@ void updateLed()
     analogWrite(greenLed, (pre3[presetArray])[1]);
     analogWrite(blueLed, (pre3[presetArray])[2]);
     presetArray++;
-    }
+  }
 
-    if (presetArray == 3)
+  if (presetArray == 3)
   {
     presetArray = 0;
   }
 }
 
 void softReset() // Restarts program from beginning but does not reset the peripherals and registers
-  {
-    asm volatile ("  jmp 0");
-  }
+{
+  asm volatile ("  jmp 0");
+}
 
-  void hardReset() // Restarts the complete arduino
-  {
-    digitalWrite(resetPin, LOW);
-  }
+void hardReset() // Restarts the complete arduino
+{
+  digitalWrite(resetPin, LOW);
+}
 
