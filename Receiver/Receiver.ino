@@ -21,10 +21,10 @@ byte ledState = 0;
 int presetArray = 0;
 // time functions
 unsigned long previousMillis = 0;
-int interval = 200;
+int interval = 60;
 // presetcolors
-int off[3] = {0, 0, 0};
-int red[3] = {255, 0, 0};
+int off[3] = {255, 255, 255};
+int red[3] = {0, 255, 255};
 int gre[3] = {0, 255, 0};
 int blu[3] = {0, 0, 255};
 int yel[3] = {255, 255, 0};
@@ -32,9 +32,9 @@ int pin[3] = {255, 0, 255};
 int pur[3] = {128, 0, 128};
 int ora[3] = {255, 165, 0};
 int whi[3] = {255, 255, 255};
-String pre1[3] = {"ora", "pin", "gre"};
-String pre2[3] = {"blu", "pin", "gre"};
-String pre3[3] = {"red", "ora", "yel"};
+int *pre1[3] = {ora, pin, gre};
+int *pre2[3] = {blu, pin, gre};
+int *pre3[3] = {red, ora, yel};
 int *presetColor = red;
 
 void setup() // code to run once
@@ -68,7 +68,8 @@ void loop() // code to run at all times
     if ((String((char *)message).substring(0, 2)) == "00") { // check the contents of the recieved message for type
       if ((String((char *)message)) == "00red") // if message reads [color], set this color
       {
-        setBlinkColor((String((char *)message)).substring(2, 5));
+        //int *messageInt = message;
+        //setBlinkColor(messageInt);
       }
     }
     else if ((String((char *)message).substring(0, 2)) == "10") // if the content is "10", set the speed
@@ -91,15 +92,15 @@ void loop() // code to run at all times
   updateTime();
 }
 
-void setBlinkColor(String color)
+void setBlinkColor(int *color)
 {
-  if (color.length() == 3)
-  {
-    *presetColor = color.toInt();
-  }
-  else {
-    Serial.println("errorcode 1: Wrong color format!");
-  }
+  //if (color.length() == 3)
+  //{
+  //  *presetColor = color;
+  //}
+  //else {
+  //  Serial.println("errorcode 1: Wrong color format!");
+  //}
 }
 
 void updateTime()
@@ -121,9 +122,9 @@ void updateLed()
     // Turning OFF the LEDs
     if (ledState == 1)
     {
-      analogWrite(redLed, 0);
-      analogWrite(greenLed, 0);
-      analogWrite(blueLed, 0);
+      analogWrite(redLed, 255);
+      analogWrite(greenLed, 255);
+      analogWrite(blueLed, 255);
       ledState = 0;
     }
     // Turning ON the LEDs based on animtype
@@ -139,34 +140,50 @@ void updateLed()
   {
 
   }
-  else if (animType == 301)
+  /*else if (animType == 301)
   {
-    analogWrite(redLed, (pre1[presetArray])[0]);
-    analogWrite(greenLed, (pre1[presetArray])[1]);
-    analogWrite(blueLed, (pre1[presetArray])[2]);
-    presetArray++;
+    nextPresetColor(1);
+    analogWrite(redLed, presetColor[0]);
+    analogWrite(greenLed, presetColor[1]);
+    analogWrite(blueLed, presetColor[2]);
   }
   else if (animType == 302)
   {
-    analogWrite(redLed, (pre2[presetArray])[0]);
-    analogWrite(greenLed, (pre2[presetArray])[1]);
-    analogWrite(blueLed, (pre2[presetArray])[2]);
-    presetArray++;
+    nextPresetColor(2);
+    analogWrite(redLed, presetColor[0]);
+    analogWrite(greenLed, presetColor[1]);
+    analogWrite(blueLed, presetColor[2]);
   }
   else if (animType == 303)
   {
-    analogWrite(redLed, (pre3[presetArray])[0]);
-    analogWrite(greenLed, (pre3[presetArray])[1]);
-    analogWrite(blueLed, (pre3[presetArray])[2]);
-    presetArray++;
-  }
-
+    nextPresetColor(3);
+    analogWrite(redLed, presetColor[0]);
+    analogWrite(greenLed, presetColor[1]);
+    analogWrite(blueLed, presetColor[2]);
+  }*/
+}
+/*
+void nextPresetColor(int type)
+{
+  presetArray++;
   if (presetArray == 3)
   {
     presetArray = 0;
   }
+  if (type == 1)
+  {
+    presetColor = pre1[presetArray];
+  }
+  if (type == 2)
+  {
+    presetColor = pre2[presetArray];
+  }
+  if (type == 3)
+  {
+    presetColor = pre3[presetArray];
+  }
 }
-
+*/
 void softReset() // Restarts program from beginning but does not reset the peripherals and registers
 {
   asm volatile ("  jmp 0");
