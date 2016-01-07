@@ -16,12 +16,12 @@ int blueLed = 11;
 
 int resetPin = 12;
 // set default blinkspeed and color
-int animType = 100;
+int animType = 301;
 byte ledState = 0;
 int presetArray = 0;
 // time functions
 unsigned long previousMillis = 0;
-int interval = 0;
+int interval = 500;
 // presetcolors
 int off[3] = {255, 255, 255};
 int red[3] = {0, 255, 255};
