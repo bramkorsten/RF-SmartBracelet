@@ -1,0 +1,200 @@
+form {
+  width: 500px;
+  height: auto;
+  margin-left: 0;
+  float: left;
+}
+
+fieldset {
+  margin-bottom: 20px;
+  border: 2px solid #1f1b1b;
+  border-radius: 5px;
+  padding-left: 20px;
+}
+
+i {
+  font-family: 'Roboto';
+}
+
+legend {
+  padding: 0 10px;
+}
+
+.information p {
+  text-align: center;
+  font-family: 'Roboto';
+  font-size: 15px;
+  margin: 0;
+  margin-top: 20px;
+}
+
+.login {
+  padding-right: 20px;
+  margin-bottom: 0;
+}
+
+.sublink {
+  float: left;
+  font-size: 10px;
+  font-family: 'Roboto';
+}
+
+.subright {
+  float: right;
+  font-size: 10px;
+  margin: 0;
+}
+
+.submitbutton {
+  font-family: 'Roboto';
+  margin-top: 20px;
+  background-color: #dbdbdb;
+  border: 2px solid #1f1b1b;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.loginbar {
+  width: 400px;
+  margin-left: calc(50% - 200px);
+  margin-top: 5px;
+  font-size: 20px;
+}
+
+.loginbutton {
+  margin-left: calc(50% - 30px);
+    width: 60px;
+  font-size: 13px;
+}
+
+.paymentsbutton {
+  margin-left: calc(50% - 250px);
+  margin-top: 80px;
+  color: #000000;
+  text-decoration: none;
+}
+
+.login p {
+  width: 400px;
+  height: auto;
+  margin: 0;
+  margin-left: calc(50% - 200px);
+  margin-top: 15px;
+  font-family: Roboto;
+}
+
+.paymentscontainer {
+  text-align: center;
+  font-size: 20px;
+  font-family: 'Roboto';
+}
+
+.leeftijd {
+  font-size: 30px !important;
+}
+
+.saldo {
+  font-size: 30px !important;
+}
+
+.red {
+  color: red;
+}
+
+.green {
+  color: green;
+}
+
+.ticket {
+  font-size: 25px !important;
+}
+
+.title {
+  font-family: 'Roboto';
+  font-size: 40px;
+  color: #E74C3C;
+  text-align: center;
+}
+
+.submitbutton:hover {
+  background-color: #E74C3C;
+  border: 2px solid #1f1b1b;
+  color: #dbdbdb;
+}
+
+.colorform {
+  display: block;
+}
+
+.speedform {
+  display: none;
+}
+.modeform {
+  display: none;
+}
+
+.console {
+  width: 500px;
+  height: auto;
+  margin-left: 0;
+  border: 2px solid #1f1b1b;
+  border-radius: 5px;
+  box-sizing: border-box;
+  float: left;
+  font-size: 12px;
+}
+
+.container {
+  width: 500px;
+  height: 450px;
+  margin-left: calc(50% - 250px);
+  margin-top: 20px;
+}
+
+.console p {
+  font-family: Consolas,monaco,monospace;
+  font-size: 12px;
+}
+
+fieldset.advanced {
+  display: none;
+  box-sizing: border-box;
+}
+
+fieldset.advanced form {
+  width: auto;
+}
+
+.submessage {
+  display: block;
+  font-size: 10px;
+  color: #777777;
+}
+
+.connections {
+  float: right;
+  width: 48px;
+  height: auto;
+  right: calc(50% - 350px);
+  top: 5%;
+  position: absolute;
+}
+
+
+.connected {
+  width: 48px;
+  height: 48px;
+  background: url("images/ic_connected.svg");
+}
+
+.disconnected {
+  width: 48px;
+  height: 48px;
+  background: url("images/ic_error.svg");
+}
+
+body {
+  background-color: #dbdbdb;
+  margin: 0;
+}
