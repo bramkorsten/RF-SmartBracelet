@@ -27,7 +27,7 @@ $type = $_POST["type"];
 if ($type == "color")
 {
 $value = $_POST["color"];
-$sql = "INSERT INTO `for_transmitter` (message)
+$sql = "INSERT INTO `for_arduino` (message)
 VALUES ('$value*')";
 }
 
@@ -42,21 +42,21 @@ $value = $_POST["speed"];
   {
     $speedtype = "11";
   }
-$sql = "INSERT INTO `for_transmitter` (message)
+$sql = "INSERT INTO `for_arduino` (message)
 VALUES ('$speedtype$value*')";
 }
 
 if ($type == "mode")
 {
 $value = $_POST["mode"];
-$sql = "INSERT INTO `for_transmitter` (message)
+$sql = "INSERT INTO `for_arduino` (message)
 VALUES ('$value*')";
 }
 
 if ($type == "advanced")
 {
 $value = $_POST["command"];
-$sql = "INSERT INTO `for_transmitter` (message)
+$sql = "INSERT INTO `for_arduino` (message)
 VALUES ('$value*')";
 }
 
