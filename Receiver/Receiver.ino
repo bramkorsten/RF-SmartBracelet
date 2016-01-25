@@ -1,5 +1,6 @@
 #include <VirtualWire.h>
 
+
 /*
  * Reciever module (slave)
  * RF-SmartBracelet
@@ -10,18 +11,18 @@
 byte message[VW_MAX_MESSAGE_LEN]; // a buffer to store the incoming messages
 byte messageLength = VW_MAX_MESSAGE_LEN; // the size of the message
 // set led IO ports
-int redLed = 9;
-int greenLed = 10;
+int redLed = 10;
+int greenLed = 9;
 int blueLed = 11;
 
 int resetPin = 12;
 // set default blinkspeed and color
-int animType = 301;
+int animType = 100;
 byte ledState = 0;
 int presetArray = 0;
 // time functions
 unsigned long previousMillis = 0;
-int interval = 500;
+int interval = 550;
 // presetcolors
 int off[3] = {255, 255, 255};
 int red[3] = {0, 255, 255};
@@ -30,12 +31,11 @@ int blu[3] = {255, 255, 0};
 int yel[3] = {0, 0, 255};
 int pin[3] = {0, 255, 0};
 int pur[3] = {128, 255, 128};
-int ora[3] = {0, 90, 255};
 int whi[3] = {0, 0, 0};
-int *pre1[3] = {ora, pin, gre};
-int *pre2[3] = {blu, pin, gre};
-int *pre3[3] = {red, ora, yel};
-int *colors[9] = {off, red, gre, blu, yel, pin, pur, ora, whi};
+int *pre1[3] = {red, pin, gre};
+int *pre2[3] = {pin, pur, red};
+int *pre3[3] = {whi, blu, pin};
+int *colors[9] = {off, red, gre, blu, yel, pin, pur, whi};
 int *presetColor = off;
 
 void setup() // code to run once
@@ -45,9 +45,12 @@ void setup() // code to run once
   pinMode(greenLed, OUTPUT);
   pinMode(blueLed, OUTPUT);
   pinMode(resetPin, OUTPUT);
+  startup();
+  randomSeed(analogRead(0));
   digitalWrite(resetPin, HIGH); // Set the Resetpin to high
   pinMode(4, OUTPUT); // digital pin 4 is used to power the radio module
   digitalWrite(4, HIGH); // power digital pin 4
+
   // Initialize the IO and ISR
   vw_setup(2000); // Bits per sec
   vw_set_rx_pin(3); // set the reciever pin to digital pin 3
@@ -67,18 +70,40 @@ void loop() // code to run at all times
     Serial.println();
 
     if ((String((char *)message).substring(0, 2)) == "00") { // check the contents of the recieved message for type
-      //if ((String((char *)message)) == "00red") // if message reads [color], set this color
       setBlinkColor((String((char *)message).substring(2, 5)).toInt());
+    }
+    else if ((String((char *)message).substring(0, 2)) == "01") { // check the contents of the recieved message for type
+      setBlinkColor(random(0, 9));
     }
     else if ((String((char *)message).substring(0, 2)) == "10") // if the content is "10", set the speed
     {
       int bpm = (String((char *)message).substring(2, 5)).toInt();
-      interval = 1000 / (bpm / 60);
+      interval = 60000 / bpm / 2;
       Serial.println(bpm);
+    }
+    else if ((String((char *)message).substring(0, 2)) == "11") // if the content is "11", set the speed to be random
+    {
+      int bpm = (String((char *)message).substring(2, 5)).toInt();
+      if (bpm != 0) {
+        int maxbpm = 60000 / bpm / 2;
+        interval = random(maxbpm);
+        Serial.println(bpm);
+        Serial.println(maxbpm);
+        Serial.println(interval);
+      }
+      else {
+        interval = random(999);
+        Serial.println(interval);
+      }
     }
     else if ((String((char *)message).substring(0, 2)) == "20") // if the content is "20", set the animationtype
     {
       animType = ((String((char *)message).substring(2, 5)).toInt());
+      //Serial.println(animType);
+    }
+    else if ((String((char *)message)) == "RESET")
+    {
+      softReset();
     }
     else {
       Serial.println("errorcode 0: Wrong format parsing!");
@@ -91,8 +116,8 @@ void loop() // code to run at all times
 }
 
 void setBlinkColor(int colorCode)
-{  
-    presetColor = colors[colorCode]; 
+{
+  presetColor = colors[colorCode];
 }
 
 void updateTime()
@@ -130,7 +155,7 @@ void updateLed()
   }
   else if (animType == 200)
   {
-
+    
   }
   else if (animType == 301)
   {
@@ -158,6 +183,7 @@ void updateLed()
 void nextPresetColor(int type)
 {
   presetArray++;
+
   if (presetArray == 3)
   {
     presetArray = 0;
@@ -185,4 +211,17 @@ void hardReset() // Restarts the complete arduino
 {
   digitalWrite(resetPin, LOW);
 }
+
+void startup()
+{
+  digitalWrite(redLed, HIGH);
+  delay(200);
+  digitalWrite(redLed, LOW);
+  delay(200);
+  digitalWrite(redLed, HIGH);
+  delay(200);
+  digitalWrite(redLed, LOW);
+  delay(200);
+}
+
 
